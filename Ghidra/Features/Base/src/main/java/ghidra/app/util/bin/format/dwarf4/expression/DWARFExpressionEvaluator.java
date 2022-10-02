@@ -274,6 +274,19 @@ public class DWARFExpressionEvaluator {
 			if (lastRegister == registerMappings.getDWARFStackPointerRegNum()) {
 				lastStackRelative = true;
 			}
+			// Hack to translate rbp-relative dwarf location to fb-relative.
+			// The following is specific to x86-64:
+			else if (lastRegister == 6) {
+				// Turn [rbp-x] into [fbreg-16-x]
+				// Assumes normal frame prologue with:
+				// --------------
+				// push rbp
+				// mov rbp, rsp
+				// --------------
+				pop();
+				push(offset-8);
+				lastStackRelative = true;
+			}
 			else {
 				useUnknownRegister = true;
 				if (offset == 0) {
