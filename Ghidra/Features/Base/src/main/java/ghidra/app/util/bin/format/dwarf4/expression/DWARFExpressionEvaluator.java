@@ -277,7 +277,7 @@ public class DWARFExpressionEvaluator {
 			// Hack to translate rbp-relative dwarf location to fb-relative.
 			// The following is specific to x86-64:
 			else if (lastRegister == 6) {
-				// Turn [rbp-x] into [fbreg-16-x]
+				// Turn [rbp-x] into [fbreg-8-x]
 				// Assumes normal frame prologue with:
 				// --------------
 				// push rbp
