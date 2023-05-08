@@ -3624,6 +3624,15 @@ int4 RulePropagateCopy::applyOp(PcodeOp *op,Funcdata &data)
 	  (op->getOut()->getAddr() != invn->getAddr()))
 	continue;		// We must not allow merging of different addrtieds
     }
+
+    // Prevent removal of stack varnodes if there is a defined symbol
+    if (vn->getSpace()->getShortcut() == 's') {
+      auto *s = vn->getSymbolEntry();
+      if (s != (SymbolEntry *)0) {
+        continue;
+      }
+    }
+
     data.opSetInput(op,invn,i); // otherwise propagate just a single copy
     return 1;
   }
